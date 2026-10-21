@@ -1,0 +1,196 @@
+---
+title: "Persiapan Lingkungan Flutter"
+pertemuan: 1
+deskripsi: "Menyiapkan lingkungan pengembangan dan menjalankan aplikasi Flutter pertama."
+subCpmk:
+  - "Mahasiswa mampu menjelaskan perangkat pengembangan Flutter."
+  - "Mahasiswa mampu menjalankan aplikasi Flutter sederhana."
+---
+
+import Quiz from "../../components/Quiz.astro";
+
+# Tujuan Praktikum
+
+Setelah menyelesaikan praktikum ini, mahasiswa mampu:
+
+- Menjelaskan fungsi Flutter SDK dan Dart.
+- Memeriksa konfigurasi lingkungan pengembangan Flutter.
+- Membuat dan menjalankan proyek Flutter sederhana.
+
+# Dasar Teori
+
+## 1. Flutter SDK
+
+Flutter SDK merupakan perangkat pengembangan yang digunakan untuk membangun aplikasi menggunakan framework Flutter. SDK ini menyediakan perintah seperti `flutter create`, `flutter run`, dan `flutter doctor` untuk membantu proses pengembangan aplikasi.
+
+## 2. Dart
+
+Dart adalah bahasa pemrograman yang digunakan untuk mengembangkan aplikasi Flutter. Kode Dart digunakan untuk menyusun logika program, mengatur tampilan, dan menangani interaksi pengguna.
+
+## 3. Lingkungan Pengembangan
+
+Untuk memulai pengembangan Flutter, diperlukan Flutter SDK, Git, editor kode seperti Visual Studio Code, serta perangkat target untuk menjalankan aplikasi, misalnya emulator Android atau perangkat fisik.
+
+# Alat dan Bahan
+
+Pastikan perangkat berikut tersedia sebelum memulai praktikum:
+
+- Laptop atau komputer.
+- Flutter SDK dan Git.
+- Visual Studio Code dengan ekstensi Flutter dan Dart.
+- Android SDK atau perangkat yang sudah dikonfigurasi untuk debugging.
+
+# Langkah Praktikum
+
+## 1. Memeriksa instalasi Flutter
+
+Buka terminal atau Command Prompt, kemudian jalankan:
+
+```bash
+flutter doctor
+```
+
+Perintah tersebut digunakan untuk memeriksa konfigurasi Flutter dan mendeteksi komponen pengembangan yang belum tersedia atau memerlukan perhatian.
+
+Perhatikan hasil pemeriksaan pada terminal. Jika terdapat komponen yang bermasalah, catat pesan yang ditampilkan dan lakukan perbaikan sebelum melanjutkan.
+
+## 2. Membuat proyek Flutter
+
+Jalankan perintah berikut:
+
+```bash
+flutter create hello_trkj
+```
+
+Perintah tersebut membuat proyek Flutter baru bernama `hello_trkj`.
+
+Setelah proses selesai, pastikan folder proyek berhasil dibuat.
+
+## 3. Membuka folder proyek
+
+Masuk ke direktori proyek:
+
+```bash
+cd hello_trkj
+```
+
+Jika menggunakan Visual Studio Code, folder proyek juga dapat dibuka melalui editor tersebut.
+
+## 4. Menjalankan aplikasi
+
+Pastikan emulator atau perangkat target sudah siap. Kemudian jalankan:
+
+```bash
+flutter run
+```
+
+Tunggu sampai proses build selesai. Amati aplikasi yang tampil pada emulator atau perangkat yang digunakan.
+
+# Hasil yang Diharapkan
+
+Setelah mengikuti langkah praktikum, mahasiswa diharapkan berhasil:
+
+- Menjalankan `flutter doctor` dan membaca hasil pemeriksaannya.
+- Membuat proyek Flutter bernama `hello_trkj`.
+- Menjalankan aplikasi pada emulator atau perangkat target.
+- Menjelaskan fungsi Flutter SDK, Dart, dan perintah `flutter doctor`.
+
+# Tugas Praktikum
+
+1. Jalankan `flutter doctor` dan dokumentasikan hasil pemeriksaannya.
+2. Buat proyek Flutter bernama `hello_trkj`.
+3. Jalankan aplikasi dan sertakan tangkapan layar hasilnya.
+4. Jelaskan fungsi Flutter SDK, Dart, dan `flutter doctor` menggunakan bahasa sendiri.
+5. Identifikasi satu komponen lingkungan pengembangan yang perlu diperhatikan berdasarkan hasil `flutter doctor`, jika ada.
+
+# Troubleshooting
+
+## 1. Perintah `flutter` tidak dikenali
+
+**Kemungkinan penyebab:** Flutter SDK belum ditambahkan ke variabel lingkungan `PATH`, atau terminal belum memuat konfigurasi terbaru.
+
+**Solusi:** Periksa lokasi instalasi Flutter SDK dan konfigurasi `PATH`, kemudian buka kembali terminal dan jalankan `flutter doctor`.
+
+## 2. Tidak ada perangkat untuk menjalankan aplikasi
+
+**Kemungkinan penyebab:** Emulator belum dijalankan atau perangkat fisik belum terhubung dan dikonfigurasi.
+
+**Solusi:** Jalankan emulator Android atau hubungkan perangkat yang sudah dikonfigurasi. Periksa perangkat yang terdeteksi menggunakan:
+
+```bash
+flutter devices
+```
+
+## Kuis Pemahaman
+
+Uji pemahaman Anda tentang persiapan lingkungan Flutter sebelum melanjutkan ke pertemuan berikutnya.
+
+<Quiz
+  slug="pertemuan-1"
+  title="Persiapan Lingkungan Flutter"
+  questions={[
+    {
+      question: "Apa fungsi utama Flutter SDK?",
+      options: [
+        "Mengelola database server",
+        "Menyediakan perangkat untuk membangun aplikasi Flutter",
+        "Menggantikan sistem operasi",
+        "Membuat desain jaringan komputer",
+      ],
+      answer: 1,
+      explanation:
+        "Flutter SDK menyediakan framework dan perangkat pengembangan untuk membangun aplikasi Flutter.",
+    },
+    {
+      question: "Bahasa pemrograman utama yang digunakan Flutter adalah ...",
+      options: ["PHP", "JavaScript", "Dart", "SQL"],
+      answer: 2,
+      explanation:
+        "Flutter menggunakan Dart sebagai bahasa pemrograman utamanya.",
+    },
+    {
+      question: "Perintah untuk memeriksa kondisi instalasi Flutter adalah ...",
+      options: [
+        "flutter doctor",
+        "flutter install-check",
+        "dart create",
+        "flutter verify-app",
+      ],
+      answer: 0,
+      explanation:
+        "Perintah flutter doctor memeriksa instalasi Flutter dan membantu mengidentifikasi kebutuhan konfigurasi.",
+    },
+    {
+      question:
+        "Perintah untuk membuat proyek Flutter baru bernama hello_trkj adalah ...",
+      options: [
+        "flutter run hello_trkj",
+        "dart install hello_trkj",
+        "flutter create hello_trkj",
+        "flutter build hello_trkj",
+      ],
+      answer: 2,
+      explanation:
+        "Perintah flutter create membuat struktur awal proyek Flutter dengan nama yang diberikan.",
+    },
+  ]}
+/>
+
+## 3. Proses build mengalami kegagalan
+
+**Kemungkinan penyebab:** Ada komponen SDK yang belum lengkap atau konfigurasi pengembangan belum sesuai.
+
+**Solusi:** Periksa pesan kesalahan pada terminal, jalankan kembali `flutter doctor`, lalu perbaiki komponen yang terkait dengan pesan tersebut.
+
+# Checklist Penyelesaian
+
+- [ ] Flutter SDK dan Git tersedia.
+- [ ] `flutter doctor` berhasil dijalankan.
+- [ ] Proyek `hello_trkj` berhasil dibuat.
+- [ ] Emulator atau perangkat target terdeteksi.
+- [ ] Aplikasi Flutter berhasil dijalankan.
+- [ ] Dokumentasi hasil praktikum telah disiapkan.
+
+---
+
+**Target akhir:** mahasiswa berhasil menjalankan aplikasi Flutter pertama dan memahami fungsi dasar perangkat pengembangannya.

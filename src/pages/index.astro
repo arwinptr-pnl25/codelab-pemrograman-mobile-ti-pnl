@@ -1,11 +1,963 @@
+
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const lessons = [
+	{ number: '01', title: 'Persiapan Lingkungan Flutter', category: 'PERSIAPAN', description: 'Instalasi Flutter SDK, editor, emulator, dan menjalankan aplikasi pertama.', url: '/praktikum/pertemuan-1' },
+	{ number: '02', title: 'Dasar Bahasa Dart', category: 'DART', description: 'Variabel, tipe data, operator, fungsi, dan dasar pemrograman Dart.' },
+	{ number: '03', title: 'Object-Oriented Programming', category: 'DART', description: 'Class, object, constructor, inheritance, dan konsep OOP.' },
+	{ number: '04', title: 'Arsitektur Flutter', category: 'FLUTTER', description: 'Widget tree, struktur proyek, dan alur build aplikasi.' },
+	{ number: '05', title: 'Stateless dan Stateful Widget', category: 'WIDGET', description: 'Memahami state dan memperbarui tampilan menggunakan setState.' },
+	{ number: '06', title: 'Layout dan Desain Responsif', category: 'UI', description: 'Menggunakan Row, Column, Stack, Container, dan layout responsif.' },
+	{ number: '07', title: 'Navigasi dan Form', category: 'UI', description: 'Berpindah halaman, menerima input, dan melakukan validasi form.' },
+	{ number: '08', title: 'Evaluasi Tengah Semester', category: 'EVALUASI', description: 'Latihan terpadu untuk mengevaluasi pemahaman dasar Flutter.' },
+	{ number: '09', title: 'Collections dan Model Data', category: 'DATA', description: 'List, Map, model class, dan menampilkan data dinamis.' },
+	{ number: '10', title: 'Penyimpanan Data Lokal', category: 'STORAGE', description: 'Mengenal SharedPreferences dan SQLite untuk penyimpanan lokal.' },
+	{ number: '11', title: 'REST API dan JSON', category: 'API', description: 'Mengambil data dari layanan web dan memproses respons JSON.' },
+	{ number: '12', title: 'Integrasi API dan CRUD', category: 'API', description: 'Menghubungkan aplikasi Flutter dengan backend melalui HTTP.' },
+	{ number: '13', title: 'State Management', category: 'ARSITEKTUR', description: 'Mengelola state dan memisahkan logika dari tampilan.' },
+	{ number: '14', title: 'Autentikasi dan Pengujian', category: 'KUALITAS', description: 'Dasar autentikasi, keamanan data, dan pengujian aplikasi.' },
+	{ number: '15', title: 'Penyelesaian Proyek Akhir', category: 'PROYEK', description: 'Menguji fitur, memperbaiki bug, dan menyiapkan dokumentasi.' },
+	{ number: '16', title: 'Presentasi Proyek Akhir', category: 'PROYEK', description: 'Demonstrasi aplikasi dan evaluasi hasil pembelajaran.' },
+];
 ---
 
 <Layout>
-	<Welcome />
+	<header class="topbar">
+		<a href="/" class="brand" aria-label="Beranda Codelab TRKJ">
+			<span class="brand-icon">&lt;/&gt;</span>
+			<span class="brand-name">Codelab <span>TRKJ</span></span>
+		</a>
+
+		<nav class="topnav" aria-label="Navigasi utama">
+			<a href="#praktikum">Praktikum</a>
+			<a href="#tentang">Tentang</a>
+			<a href="#referensi">Referensi</a>
+		</nav>
+
+		<a class="github-link" href="https://github.com/" target="_blank" rel="noreferrer">
+			GitHub ↗
+		</a>
+	</header>
+
+	<main>
+		<section class="hero" id="tentang">
+			<div class="hero-content">
+				<div class="eyebrow"><span class="status-dot"></span> PANDUAN PRAKTIKUM INTERAKTIF</div>
+
+				<h1>Bangun aplikasi mobile.<br /><span>Pahami setiap prosesnya.</span></h1>
+
+				<p class="hero-description">
+					Panduan belajar Pemrograman Mobile menggunakan Flutter dan Dart.
+					Pelajari konsep, praktikkan kode, dan kembangkan aplikasi secara bertahap.
+				</p>
+
+				<div class="hero-actions">
+					<a href="#praktikum" class="button button-primary">
+						Mulai belajar <span aria-hidden="true">→</span>
+					</a>
+					<a href="#referensi" class="button button-secondary">Lihat panduan</a>
+				</div>
+
+				<div class="hero-meta">
+					<span><strong>16</strong> pertemuan</span>
+					<span class="meta-divider"></span>
+					<span><strong>Flutter</strong> + Dart</span>
+					<span class="meta-divider"></span>
+					<span><strong>Project-based</strong> learning</span>
+				</div>
+			</div>
+
+			<div class="code-window" aria-label="Contoh kode Flutter">
+				<div class="window-header">
+					<div class="window-dots"><i></i><i></i><i></i></div>
+					<span>lib/main.dart</span>
+					<span class="file-type">DART</span>
+				</div>
+				
+				
+					
+					<div class="code-body">
+					<pre>{`import 'package:flutter/material.dart';
+
+					void main() {
+					runApp(const MyApp());
+					}
+
+					class MyApp extends StatelessWidget {
+					const MyApp({super.key});
+
+					@override
+					Widget build(BuildContext context) {
+						return const MaterialApp(
+						home: Scaffold(
+							body: Center(
+							child: Text('Hello, TRKJ!'),
+							),
+						),
+						);
+					}
+					}`}</pre>
+					</div>
+
+
+
+				<div class="window-footer"><span class="terminal-dot"></span> Contoh struktur aplikasi Flutter</div>
+			</div>
+		</section>
+
+		<section class="learning-path" id="referensi">
+			<div class="section-heading">
+				<div>
+					<p class="section-label">LEARNING PATH</p>
+					<h2>Mulai dari dasar, lanjut ke proyek.</h2>
+					<p class="section-description">Ikuti alur pembelajaran dari persiapan lingkungan hingga pengembangan aplikasi.</p>
+				</div>
+				<div class="path-badge">16 MODUL</div>
+			</div>
+
+			<div class="path-grid">
+				<div class="path-item">
+					<span class="path-number">01</span>
+					<div><strong>Fondasi</strong><p>Dart dan konsep dasar Flutter</p></div>
+				</div>
+				<div class="path-item">
+					<span class="path-number">02</span>
+					<div><strong>Antarmuka</strong><p>Widget, layout, dan navigasi</p></div>
+				</div>
+				<div class="path-item">
+					<span class="path-number">03</span>
+					<div><strong>Pengelolaan data</strong><p>Storage, REST API, dan state</p></div>
+				</div>
+				<div class="path-item">
+					<span class="path-number">04</span>
+					<div><strong>Implementasi proyek</strong><p>Pengujian dan presentasi aplikasi</p></div>
+				</div>
+			</div>
+		</section>
+
+		
+		<section class="progress-section" id="progres">
+		<div class="section-heading">
+			<div>
+			<p class="section-label">PROGRES BELAJAR</p>
+			<h2>Perjalanan belajar Anda.</h2>
+			<p class="section-description">
+				Pantau perkembangan praktikum dari checklist setiap pertemuan.
+			</p>
+			</div>
+			<span class="path-badge" id="progress-status">Belum dimulai</span>
+		</div>
+
+		<div class="progress-dashboard">
+			<div class="progress-summary">
+			<div class="progress-summary-top">
+				<div>
+				<p class="progress-caption">Progres keseluruhan</p>
+				<div class="progress-percentage" id="overall-percentage">0%</div>
+				</div>
+				<div class="progress-icon">&check;</div>
+			</div>
+
+			<div class="overall-progress-track">
+				<div class="overall-progress-fill" id="overall-progress-fill"></div>
+			</div>
+
+			<p class="progress-help" id="overall-progress-text">
+				Mulai centang checklist untuk mencatat progres Anda.
+			</p>
+			</div>
+
+			<div class="progress-stat">
+			<p class="progress-caption">Modul selesai</p>
+			<div class="stat-number">
+				<span id="completed-modules">0</span>
+				<span class="stat-total">/ 16</span>
+			</div>
+			<p class="progress-help">Pertemuan dengan semua checklist selesai.</p>
+			</div>
+
+			<div class="progress-stat">
+			<p class="progress-caption">Checklist selesai</p>
+			<div class="stat-number">
+				<span id="completed-checklists">0</span>
+				<span class="stat-total">/ 64</span>
+			</div>
+			<p class="progress-help">Total checklist dari 16 pertemuan.</p>
+			</div>
+		</div>
+		</section>
+
+
+		<section class="lessons-section" id="praktikum">
+			<div class="section-heading lesson-heading">
+				<div>
+					<p class="section-label">MATERI PRAKTIKUM</p>
+					<h2>Jelajahi setiap pertemuan.</h2>
+					<p class="section-description">Pilih materi untuk memulai perjalanan belajar Anda.</p>
+				</div>
+				<span class="lesson-count">01 — 16</span>
+			</div>
+
+			<div class="lesson-grid">
+				{lessons.map((lesson) => (
+					<a
+						class="lesson-card"
+						href={lesson.url ?? '#'}
+						id={`pertemuan-${lesson.number}`}
+						data-lesson-slug={`pertemuan-${Number(lesson.number)}`}
+						>
+						<div class="lesson-card-top">
+							<span class="lesson-number">{lesson.number}</span>
+							<span class="lesson-category">{lesson.category}</span>
+						</div>
+						<h3>{lesson.title}</h3>
+						<p>{lesson.description}</p>
+						<div class="lesson-progress">
+						<div class="lesson-progress-track">
+							<div class="lesson-progress-fill"></div>
+						</div>
+						<div class="lesson-progress-info">
+							<span class="lesson-progress-status">Belum dimulai</span>
+							<span class="lesson-progress-count">0/4</span>
+						</div>
+						</div>
+
+						<div class="lesson-card-footer">
+						<span>Buka materi</span>
+						<span class="lesson-arrow" aria-hidden="true">↗</span>
+						</div>
+					</a>
+				))}
+			</div>
+			<p class="lesson-note">
+				Daftar ini merupakan rancangan awal. Isi, urutan, dan pemetaan capaian pembelajaran akan disesuaikan dengan RPS resmi mata kuliah.
+			</p>
+		</section>
+
+		<section class="start-banner">
+			<div>
+				<p class="section-label">SIAP UNTUK MEMULAI?</p>
+				<h2>Satu langkah kecil. Satu aplikasi baru.</h2>
+				<p>Mulai dari persiapan lingkungan dan ikuti setiap langkah praktik secara terstruktur.</p>
+			</div>
+			<a href="#praktikum" class="button button-light">Mulai pertemuan 01 →</a>
+		</section>
+	</main>
+
+	<footer class="footer">
+		<a href="/" class="footer-brand"><span class="brand-icon">&lt;/&gt;</span> Codelab Pemrograman Mobile TRKJ</a>
+		<p>Media pembelajaran praktikum Flutter dan Dart.</p>
+		<span>© {new Date().getFullYear()} · TRKJ</span>
+	</footer>
 </Layout>
+
+<style>
+	.topbar {
+		height: 72px;
+		padding: 0 max(6%, calc((100% - 1160px) / 2));
+		display: flex;
+		align-items: center;
+		gap: 32px;
+		background: #fff;
+		border-bottom: 1px solid #e8edf4;
+	}
+
+	.brand, .footer-brand {
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		font-size: 15px;
+		font-weight: 750;
+		letter-spacing: -0.4px;
+		white-space: nowrap;
+	}
+
+	.brand-icon {
+		display: inline-grid;
+		place-items: center;
+		width: 36px;
+		height: 36px;
+		border-radius: 10px;
+		background: #1d4ed8;
+		color: white;
+		font-family: monospace;
+		font-size: 15px;
+		font-weight: 700;
+	}
+
+	.brand-name span { color: #2563eb; }
+
+	.topnav {
+		display: flex;
+		align-items: center;
+		gap: 28px;
+		margin-left: auto;
+	}
+
+	.topnav a, .github-link {
+		color: #475569;
+		font-size: 13px;
+		font-weight: 550;
+		transition: color 0.2s;
+	}
+
+	.topnav a:hover, .github-link:hover { color: #2563eb; }
+
+	.github-link {
+		padding: 9px 14px;
+		border: 1px solid #e2e8f0;
+		border-radius: 8px;
+		color: #1e293b;
+	}
+
+	main { overflow: hidden; }
+
+	.hero {
+		max-width: 1160px;
+		margin: 0 auto;
+		padding: 92px 24px 84px;
+		display: grid;
+		grid-template-columns: 1.08fr 0.92fr;
+		align-items: center;
+		gap: 54px;
+	}
+
+	.eyebrow, .section-label {
+		font-size: 11px;
+		font-weight: 750;
+		letter-spacing: 1.35px;
+		color: #2563eb;
+	}
+
+	.eyebrow {
+		display: flex;
+		align-items: center;
+		gap: 9px;
+	}
+
+	.status-dot {
+		width: 7px;
+		height: 7px;
+		border-radius: 50%;
+		background: #22c55e;
+		box-shadow: 0 0 0 4px #dcfce7;
+	}
+
+	.hero h1 {
+		margin: 24px 0 20px;
+		font-size: clamp(34px, 4vw, 51px);
+		line-height: 1.13;
+		letter-spacing: -2.5px;
+		font-weight: 800;
+		color: #0f172a;
+	}
+
+	.hero h1 span { color: #2563eb; }
+
+	.hero-description {
+		max-width: 510px;
+		margin: 0;
+		color: #64748b;
+		font-size: 15px;
+		line-height: 1.9;
+	}
+
+	.hero-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+		margin-top: 29px;
+	}
+
+	.button {
+		min-height: 45px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 12px;
+		padding: 0 18px;
+		border-radius: 8px;
+		font-size: 13px;
+		font-weight: 700;
+		transition: transform 0.2s, background 0.2s;
+	}
+
+	.button:hover { transform: translateY(-2px); }
+	.button-primary { background: #2563eb; color: white; }
+	.button-primary:hover { background: #1d4ed8; }
+	.button-secondary { border: 1px solid #dbe3ee; background: white; color: #334155; }
+
+	.hero-meta {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 13px;
+		margin-top: 31px;
+		color: #64748b;
+		font-size: 11px;
+	}
+
+	.hero-meta strong { color: #334155; font-weight: 750; }
+	.meta-divider { height: 14px; width: 1px; background: #cbd5e1; }
+
+	.code-window {
+		overflow: hidden;
+		border: 1px solid #29354b;
+		border-radius: 13px;
+		background: #0f172a;
+		color: #e2e8f0;
+		box-shadow: 0 22px 65px -28px #64748b;
+		font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+		font-size: 11px;
+	}
+
+	.window-header {
+		height: 45px;
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 0 16px;
+		background: #182236;
+		border-bottom: 1px solid #29354b;
+		color: #aab7cc;
+		font-size: 10px;
+	}
+
+	.window-dots { display: flex; gap: 5px; }
+	.window-dots i { width: 8px; height: 8px; border-radius: 50%; background: #64748b; }
+	.window-dots i:nth-child(1) { background: #f87171; }
+	.window-dots i:nth-child(2) { background: #fbbf24; }
+	.window-dots i:nth-child(3) { background: #4ade80; }
+	.file-type { margin-left: auto; color: #94a3b8; font-size: 9px; letter-spacing: 1px; }
+
+	.code-body {
+		padding: 20px 12px;
+		overflow-x: auto;
+		line-height: 1.9;
+		white-space: nowrap;
+	}
+
+	.code-body pre {
+		margin: 0;
+		overflow-x: auto;
+		font: inherit;
+		line-height: 1.9;
+		white-space: pre;
+		}
+
+		.code-body code {
+		font: inherit;
+	}
+
+	.line-number {
+		display: inline-block;
+		width: 28px;
+		padding-right: 10px;
+		color: #53627b;
+		text-align: right;
+		user-select: none;
+	}
+
+	.code-space { height: 9px; }
+	.syntax-purple { color: #c4b5fd; }
+	.syntax-green { color: #86efac; }
+	.syntax-blue { color: #7dd3fc; }
+	.syntax-yellow { color: #fde68a; }
+	.syntax-orange { color: #fdba74; }
+
+	.window-footer {
+		padding: 12px 16px;
+		border-top: 1px solid #29354b;
+		background: #131d30;
+		color: #9eacc2;
+		font-family: inherit;
+		font-size: 10px;
+	}
+
+	.terminal-dot {
+		display: inline-block;
+		width: 6px;
+		height: 6px;
+		margin-right: 7px;
+		border-radius: 50%;
+		background: #4ade80;
+	}
+
+	.learning-path, .lessons-section {
+		max-width: 1160px;
+		margin: 0 auto;
+		padding: 35px 24px 82px;
+	}
+
+	.learning-path {
+		border-top: 1px solid #e7edf5;
+		padding-top: 60px;
+	}
+
+	.section-heading {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: 24px;
+		margin-bottom: 28px;
+	}
+
+	.section-label { margin: 0 0 12px; }
+
+	.section-heading h2, .start-banner h2 {
+		margin: 0;
+		font-size: clamp(23px, 3vw, 31px);
+		line-height: 1.25;
+		letter-spacing: -1px;
+		color: #0f172a;
+	}
+
+	.section-description {
+		margin: 10px 0 0;
+		color: #64748b;
+		font-size: 13px;
+		line-height: 1.7;
+	}
+
+	.path-badge, .lesson-count {
+		flex-shrink: 0;
+		padding: 8px 11px;
+		border: 1px solid #dbeafe;
+		border-radius: 6px;
+		background: #eff6ff;
+		color: #1d4ed8;
+		font-size: 10px;
+		font-weight: 750;
+		letter-spacing: 0.7px;
+	}
+
+	.path-grid {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		border: 1px solid #e2e8f0;
+		border-radius: 12px;
+		background: #fff;
+	}
+
+	.path-item {
+		display: flex;
+		gap: 13px;
+		padding: 22px 18px;
+		border-right: 1px solid #e2e8f0;
+	}
+
+	.path-item:last-child { border-right: 0; }
+	.path-number { color: #2563eb; font-size: 12px; font-weight: 800; }
+	.path-item strong { font-size: 12px; color: #1e293b; }
+	.path-item p { margin: 7px 0 0; color: #64748b; font-size: 11px; line-height: 1.6; }
+
+	.lessons-section { padding-top: 28px; }
+
+	
+	/* Dashboard progres belajar */
+	.progress-section {
+	max-width: 1160px;
+	margin: 0 auto;
+	padding: 30px 24px 45px;
+	}
+
+	.progress-dashboard {
+	display: grid;
+	grid-template-columns: 1.5fr 1fr 1fr;
+	gap: 15px;
+	}
+
+	.progress-summary,
+	.progress-stat {
+	padding: 22px;
+	border: 1px solid #e2e8f0;
+	border-radius: 12px;
+	background: #fff;
+	}
+
+	.progress-summary-top {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 15px;
+	}
+
+	.progress-caption {
+	margin: 0;
+	color: #64748b;
+	font-size: 11px;
+	font-weight: 600;
+	}
+
+	.progress-percentage {
+	margin-top: 8px;
+	color: #1d4ed8;
+	font-size: 32px;
+	font-weight: 800;
+	letter-spacing: -1px;
+	}
+
+	.progress-icon {
+	display: grid;
+	place-items: center;
+	width: 36px;
+	height: 36px;
+	border-radius: 9px;
+	background: #eff6ff;
+	color: #2563eb;
+	font-size: 22px;
+	font-weight: 800;
+	}
+
+	.overall-progress-track,
+	.lesson-progress-track {
+	overflow: hidden;
+	height: 7px;
+	border-radius: 99px;
+	background: #e2e8f0;
+	}
+
+	.overall-progress-track {
+	margin-top: 17px;
+	}
+
+	.overall-progress-fill,
+	.lesson-progress-fill {
+	width: 0;
+	height: 100%;
+	border-radius: inherit;
+	background: #2563eb;
+	transition: width 0.3s ease;
+	}
+
+	.progress-help {
+	margin: 12px 0 0;
+	color: #64748b;
+	font-size: 11px;
+	line-height: 1.7;
+	}
+
+	.stat-number {
+	margin-top: 13px;
+	color: #172033;
+	font-size: 29px;
+	font-weight: 800;
+	letter-spacing: -1px;
+	}
+
+	.stat-total {
+	color: #94a3b8;
+	font-size: 15px;
+	font-weight: 600;
+	}
+
+	.lesson-progress {
+	margin-top: 15px;
+	}
+
+	.lesson-progress-track {
+	height: 5px;
+	}
+
+	.lesson-progress-info {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	margin-top: 8px;
+	color: #64748b;
+	font-size: 10px;
+	}
+
+	.lesson-progress-status {
+	font-weight: 650;
+	}
+
+	.lesson-card[data-progress-state="completed"] .lesson-progress-status {
+	color: #15803d;
+	}
+
+	.lesson-card[data-progress-state="in-progress"] .lesson-progress-status {
+	color: #1d4ed8;
+	}
+
+	.lesson-card[data-progress-state="completed"] .lesson-progress-fill {
+	background: #16a34a;
+	}
+
+	@media (max-width: 950px) {
+	.progress-dashboard {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.progress-summary {
+		grid-column: 1 / -1;
+	}
+	}
+
+	@media (max-width: 600px) {
+	.progress-section {
+		padding: 25px 20px 35px;
+	}
+
+	.progress-dashboard {
+		grid-template-columns: 1fr;
+	}
+
+	.progress-summary {
+		grid-column: auto;
+	}
+	}
+
+
+	.lesson-grid {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 15px;
+	}
+
+	.lesson-card {
+		min-width: 0;
+		display: block;
+		flex-direction: column;
+		min-height: 215px;
+		padding: 19px;
+		border: 1px solid #e2e8f0;
+		border-radius: 10px;
+		background: #fff;
+		transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+		color: inherit;
+		text-decoration: none;
+		cursor: pointer;
+	}
+
+	.lesson-card:hover {
+		border-color: #93c5fd;
+		transform: translateY(-3px);
+		box-shadow: 0 12px 28px -22px #64748b;
+	}
+
+	.lesson-card:focus-visible {
+		outline: 3px solid #6478e5;
+		outline-offset: 4px;
+	}
+
+	.lesson-card-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+	.lesson-number { color: #2563eb; font-size: 12px; font-weight: 800; }
+	.lesson-category { color: #64748b; font-size: 9px; font-weight: 750; letter-spacing: 0.5px; }
+	.lesson-card h3 { margin: 20px 0 8px; color: #172033; font-size: 14px; line-height: 1.5; letter-spacing: -0.2px; }
+	.lesson-card > p { margin: 0 0 18px; color: #64748b; font-size: 11px; line-height: 1.8; }
+	.lesson-card-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 13px; border-top: 1px solid #f1f5f9; color: #2563eb; font-size: 10px; font-weight: 700; }
+	.lesson-arrow { font-size: 15px; }
+	.lesson-note { margin: 20px 0 0; color: #64748b; font-size: 11px; line-height: 1.7; }
+
+	.start-banner {
+		max-width: 1112px;
+		margin: 0 auto 76px;
+		padding: 35px 40px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 25px;
+		border-radius: 13px;
+		background: #eff6ff;
+		border: 1px solid #dbeafe;
+	}
+
+	.start-banner h2 { font-size: clamp(21px, 3vw, 27px); }
+	.start-banner > div > p:last-child { margin: 10px 0 0; color: #64748b; font-size: 12px; line-height: 1.8; }
+	.button-light { flex-shrink: 0; background: #2563eb; color: #fff; }
+	.button-light:hover { background: #1d4ed8; }
+
+	.footer {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 15px;
+		padding: 25px max(6%, calc((100% - 1160px) / 2));
+		border-top: 1px solid #e2e8f0;
+		background: #fff;
+	}
+
+	.footer-brand { font-size: 12px; }
+	.footer-brand .brand-icon { width: 29px; height: 29px; border-radius: 8px; font-size: 12px; }
+	.footer p, .footer > span { margin: 0; color: #64748b; font-size: 10px; }
+
+	@media (max-width: 950px) {
+		.hero { grid-template-columns: 1fr; gap: 38px; padding-top: 65px; }
+		.hero-content { max-width: 700px; }
+		.code-window { max-width: 650px; width: 100%; }
+		.lesson-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+		.path-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+		.path-item:nth-child(2) { border-right: 0; }
+		.path-item:nth-child(-n+2) { border-bottom: 1px solid #e2e8f0; }
+		.start-banner { margin-right: 24px; margin-left: 24px; }
+	}
+
+	@media (max-width: 600px) {
+		.topbar { height: 64px; padding: 0 17px; gap: 12px; }
+		.brand { font-size: 13px; }
+		.brand-icon { width: 32px; height: 32px; }
+		.topnav { display: none; }
+		.github-link { margin-left: auto; padding: 8px 10px; font-size: 11px; }
+		.hero { padding: 52px 20px 55px; gap: 35px; }
+		.hero h1 { font-size: 36px; letter-spacing: -1.7px; }
+		.hero-description { font-size: 13px; }
+		.hero-meta { gap: 9px; font-size: 10px; }
+		.code-window { font-size: 10px; }
+		.learning-path, .lessons-section { padding: 30px 20px 55px; }
+		.section-heading { align-items: flex-start; }
+		.section-heading h2 { font-size: 24px; }
+		.path-grid { grid-template-columns: 1fr; }
+		.path-item { border-right: 0; border-bottom: 1px solid #e2e8f0; }
+		.path-item:nth-child(2) { border-bottom: 1px solid #e2e8f0; }
+		.path-item:last-child { border-bottom: 0; }
+		.lesson-grid { grid-template-columns: 1fr; gap: 11px; }
+		.lesson-card { min-height: 190px; }
+		.start-banner { flex-direction: column; align-items: flex-start; padding: 28px 22px; margin: 0 20px 50px; }
+		.footer { padding: 22px 20px; }
+	}
+</style>
+
+
+<script>
+  function initLearningProgress() {
+    const cards = Array.from(
+      document.querySelectorAll<HTMLElement>('.lesson-card[data-lesson-slug]')
+    );
+
+    const checklistPerModule = 4;
+    const totalModules = cards.length;
+    const totalChecklists = totalModules * checklistPerModule;
+
+    let completedModules = 0;
+    let completedChecklists = 0;
+
+    cards.forEach((card) => {
+      const slug = card.dataset.lessonSlug;
+      if (!slug) return;
+
+      const statusElement = card.querySelector<HTMLElement>(
+        '.lesson-progress-status'
+      );
+      const countElement = card.querySelector<HTMLElement>(
+        '.lesson-progress-count'
+      );
+      const fillElement = card.querySelector<HTMLElement>(
+        '.lesson-progress-fill'
+      );
+
+      let savedState: Record<string, boolean> = {};
+
+      try {
+        const saved = localStorage.getItem(
+          `codelab-trkj-checklist-${slug}`
+        );
+
+        savedState = saved ? JSON.parse(saved) : {};
+      } catch {
+        savedState = {};
+      }
+
+      const completed = Object.values(savedState).filter(
+        (value) => value === true
+      ).length;
+
+      // Batasi jumlah checklist agar tidak melebihi 4 per modul.
+      const safeCompleted = Math.min(completed, checklistPerModule);
+      const percentage = (safeCompleted / checklistPerModule) * 100;
+
+      completedChecklists += safeCompleted;
+
+      if (safeCompleted === checklistPerModule) {
+        completedModules++;
+        card.dataset.progressState = 'completed';
+
+        if (statusElement) {
+          statusElement.textContent = 'Selesai';
+        }
+      } else if (safeCompleted > 0) {
+        card.dataset.progressState = 'in-progress';
+
+        if (statusElement) {
+          statusElement.textContent = 'Sedang dipelajari';
+        }
+      } else {
+        card.dataset.progressState = 'not-started';
+
+        if (statusElement) {
+          statusElement.textContent = 'Belum dimulai';
+        }
+      }
+
+      if (countElement) {
+        countElement.textContent =
+          `${safeCompleted}/${checklistPerModule}`;
+      }
+
+      if (fillElement) {
+        fillElement.style.width = `${percentage}%`;
+      }
+    });
+
+    const overallPercentage =
+      totalChecklists > 0
+        ? Math.round((completedChecklists / totalChecklists) * 100)
+        : 0;
+
+    const percentageElement = document.querySelector<HTMLElement>(
+      '#overall-percentage'
+    );
+    const overallFill = document.querySelector<HTMLElement>(
+      '#overall-progress-fill'
+    );
+    const overallText = document.querySelector<HTMLElement>(
+      '#overall-progress-text'
+    );
+    const modulesElement = document.querySelector<HTMLElement>(
+      '#completed-modules'
+    );
+    const checklistsElement = document.querySelector<HTMLElement>(
+      '#completed-checklists'
+    );
+    const statusElement = document.querySelector<HTMLElement>(
+      '#progress-status'
+    );
+
+    if (percentageElement) {
+      percentageElement.textContent = `${overallPercentage}%`;
+    }
+
+    if (overallFill) {
+      overallFill.style.width = `${overallPercentage}%`;
+    }
+
+    if (overallText) {
+      overallText.textContent =
+        `${completedChecklists} dari ${totalChecklists} checklist telah diselesaikan.`;
+    }
+
+    if (modulesElement) {
+      modulesElement.textContent = String(completedModules);
+    }
+
+    if (checklistsElement) {
+      checklistsElement.textContent = String(completedChecklists);
+    }
+
+    if (statusElement) {
+      if (completedModules === totalModules && totalModules > 0) {
+        statusElement.textContent = 'Semua modul selesai';
+      } else if (completedChecklists > 0) {
+        statusElement.textContent = 'Sedang belajar';
+      } else {
+        statusElement.textContent = 'Belum dimulai';
+      }
+    }
+  }
+
+  initLearningProgress();
+</script>
+

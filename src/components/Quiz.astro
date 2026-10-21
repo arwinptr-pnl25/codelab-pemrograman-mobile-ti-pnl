@@ -1,0 +1,392 @@
+
+---
+interface Question {
+  question: string;
+  options: string[];
+  answer: number;
+  explanation: string;
+}
+
+interface Props {
+  title?: string;
+  slug: string;
+  questions: Question[];
+}
+
+const {
+  title = 'Uji Pemahaman',
+  slug,
+  questions,
+} = Astro.props;
+---
+
+<section class="quiz" data-quiz-slug={slug}>
+  <div class="quiz-header">
+    <span class="quiz-label">KUIS INTERAKTIF</span>
+    <h3>{title}</h3>
+    <p>
+      Jawab semua pertanyaan, lalu periksa jawaban Anda.
+    </p>
+  </div>
+
+  {questions.map((question, index) => (
+    <fieldset
+      class="quiz-question"
+      data-correct={question.answer}
+      data-explanation={question.explanation}
+    >
+      <legend>
+        <span class="question-number">{index + 1}</span>
+        {question.question}
+      </legend>
+
+      <div class="quiz-options">
+        {question.options.map((option, optionIndex) => (
+          <label class="quiz-option">
+            <input
+              type="radio"
+              name={`${slug}-question-${index}`}
+              value={optionIndex}
+            />
+            <span>{option}</span>
+          </label>
+        ))}
+      </div>
+
+      <div class="question-feedback" aria-live="polite"></div>
+    </fieldset>
+  ))}
+
+  <div class="quiz-actions">
+    <button type="button" class="quiz-submit">
+      Periksa Jawaban
+    </button>
+    <button type="button" class="quiz-reset">
+      Ulangi Kuis
+    </button>
+  </div>
+
+  <div class="quiz-result" aria-live="polite" hidden>
+    <span class="result-label">HASIL KUIS</span>
+    <div class="result-score">0/0</div>
+    <p class="result-message"></p>
+  </div>
+</section>
+
+<script>
+  function initQuizzes() {
+    document.querySelectorAll<HTMLElement>('.quiz').forEach((quiz) => {
+      if (quiz.dataset.initialized === 'true') return;
+      quiz.dataset.initialized = 'true';
+
+      const slug = quiz.dataset.quizSlug;
+      if (!slug) return;
+
+      const storageKey = `codelab-trkj-quiz-${slug}`;
+
+      const questions = Array.from(
+        quiz.querySelectorAll<HTMLFieldSetElement>('.quiz-question')
+      );
+
+      const submitButton =
+        quiz.querySelector<HTMLButtonElement>('.quiz-submit');
+      const resetButton =
+        quiz.querySelector<HTMLButtonElement>('.quiz-reset');
+      const result = quiz.querySelector<HTMLElement>('.quiz-result');
+      const scoreElement =
+        quiz.querySelector<HTMLElement>('.result-score');
+      const messageElement =
+        quiz.querySelector<HTMLElement>('.result-message');
+
+      if (!submitButton || !resetButton || !result ||
+          !scoreElement || !messageElement) return;
+
+      function checkAnswers() {
+        let correctCount = 0;
+        let answeredCount = 0;
+
+        questions.forEach((question) => {
+          const correctAnswer = Number(question.dataset.correct);
+          const explanation = question.dataset.explanation ?? '';
+
+          const selected = question.querySelector<HTMLInputElement>(
+            'input[type="radio"]:checked'
+          );
+
+          const feedback =
+            question.querySelector<HTMLElement>('.question-feedback');
+
+          question.querySelectorAll('.quiz-option').forEach((option) => {
+            option.classList.remove('is-correct', 'is-wrong');
+          });
+
+          if (!feedback) return;
+
+          if (!selected) {
+            feedback.textContent = 'Belum dijawab.';
+            feedback.className = 'question-feedback is-unanswered';
+            return;
+          }
+
+          answeredCount++;
+
+          const selectedAnswer = Number(selected.value);
+          const selectedLabel = selected.closest('.quiz-option');
+
+          if (selectedAnswer === correctAnswer) {
+            correctCount++;
+
+            selectedLabel?.classList.add('is-correct');
+            feedback.textContent = `Benar! ${explanation}`;
+            feedback.className = 'question-feedback is-correct';
+          } else {
+            selectedLabel?.classList.add('is-wrong');
+            feedback.textContent = `Belum tepat. ${explanation}`;
+            feedback.className = 'question-feedback is-wrong';
+          }
+        });
+
+        const total = questions.length;
+        const score = total > 0
+          ? Math.round((correctCount / total) * 100)
+          : 0;
+
+        scoreElement.textContent = `${correctCount}/${total}`;
+        messageElement.textContent =
+          `Nilai ${score}/100 · ${answeredCount} dari ${total} soal dijawab.`;
+
+        result.hidden = false;
+
+        try {
+          const previous = localStorage.getItem(storageKey);
+          const previousData = previous ? JSON.parse(previous) : null;
+          const bestScore = Math.max(
+            score,
+            Number(previousData?.bestScore ?? 0)
+          );
+
+          localStorage.setItem(
+            storageKey,
+            JSON.stringify({
+              score,
+              bestScore,
+              correctCount,
+              total,
+              answeredCount,
+              completed: answeredCount === total,
+              updatedAt: new Date().toISOString(),
+            })
+          );
+        } catch (error) {
+          console.warn('Hasil kuis tidak dapat disimpan:', error);
+        }
+      }
+
+      function resetQuiz() {
+        questions.forEach((question) => {
+          question.querySelectorAll<HTMLInputElement>(
+            'input[type="radio"]'
+          ).forEach((input) => {
+            input.checked = false;
+          });
+
+          question.querySelectorAll('.quiz-option').forEach((option) => {
+            option.classList.remove('is-correct', 'is-wrong');
+          });
+
+          const feedback =
+            question.querySelector<HTMLElement>('.question-feedback');
+
+          if (feedback) {
+            feedback.textContent = '';
+            feedback.className = 'question-feedback';
+          }
+        });
+
+        result.hidden = true;
+      }
+
+      submitButton.addEventListener('click', checkAnswers);
+      resetButton.addEventListener('click', resetQuiz);
+    });
+  }
+
+  initQuizzes();
+</script>
+
+<style>
+  .quiz {
+    margin: 32px 0;
+    padding: 24px;
+    border: 1px solid #dbeafe;
+    border-radius: 14px;
+    background: #fff;
+    color: #172033;
+  }
+
+  .quiz-header {
+    margin-bottom: 25px;
+  }
+
+  .quiz-label,
+  .result-label {
+    color: #2563eb;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+
+  .quiz-header h3 {
+    margin: 9px 0;
+    font-size: 22px;
+  }
+
+  .quiz-header p {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .quiz-question {
+    min-width: 0;
+    margin: 0;
+    padding: 20px 0;
+    border: 0;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  .quiz-question legend {
+    width: 100%;
+    padding: 0;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.7;
+  }
+
+  .question-number {
+    display: inline-grid;
+    place-items: center;
+    width: 27px;
+    height: 27px;
+    margin-right: 7px;
+    border-radius: 7px;
+    background: #eff6ff;
+    color: #1d4ed8;
+  }
+
+  .quiz-options {
+    display: grid;
+    gap: 9px;
+    margin-top: 15px;
+  }
+
+  .quiz-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .quiz-option:hover {
+    border-color: #93c5fd;
+    background: #f8fbff;
+  }
+
+  .quiz-option input {
+    margin-top: 4px;
+    accent-color: #2563eb;
+  }
+
+  .quiz-option.is-correct {
+    border-color: #86efac;
+    background: #f0fdf4;
+  }
+
+  .quiz-option.is-wrong {
+    border-color: #fca5a5;
+    background: #fef2f2;
+  }
+
+  .question-feedback {
+    margin-top: 10px;
+    font-size: 12px;
+    line-height: 1.7;
+  }
+
+  .question-feedback:empty {
+    display: none;
+  }
+
+  .question-feedback.is-correct {
+    color: #15803d;
+  }
+
+  .question-feedback.is-wrong,
+  .question-feedback.is-unanswered {
+    color: #b45309;
+  }
+
+  .quiz-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .quiz-actions button {
+    padding: 11px 16px;
+    border: 1px solid #dbe3ee;
+    border-radius: 8px;
+    background: #fff;
+    color: #334155;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .quiz-actions .quiz-submit {
+    border-color: #2563eb;
+    background: #2563eb;
+    color: #fff;
+  }
+
+  .quiz-result {
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 10px;
+    background: #eff6ff;
+  }
+
+  .quiz-result[hidden] {
+    display: none;
+  }
+
+  .result-score {
+    margin-top: 6px;
+    color: #1d4ed8;
+    font-size: 30px;
+    font-weight: 800;
+  }
+
+  .result-message {
+    margin: 5px 0 0;
+    color: #475569;
+    font-size: 12px;
+  }
+
+  @media (max-width: 600px) {
+    .quiz {
+      padding: 17px;
+    }
+
+    .quiz-header h3 {
+      font-size: 19px;
+    }
+  }
+</style>

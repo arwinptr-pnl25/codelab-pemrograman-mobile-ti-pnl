@@ -1,0 +1,234 @@
+
+---
+import Layout from '../../layouts/Layout.astro';
+
+const steps = [
+  {
+    title: 'Periksa instalasi Flutter',
+    description:
+      'Buka terminal dan jalankan perintah flutter doctor untuk memeriksa kesiapan lingkungan pengembangan.',
+    command: 'flutter doctor',
+  },
+  {
+    title: 'Buat proyek Flutterrrr',
+    description:
+      'Pilih folder kerja, lalu buat proyek baru menggunakan Flutter CLI.',
+    command: 'flutter create hello_trkj',
+  },
+  {
+    title: 'Jalankan aplikasi',
+    description:
+      'Masuk ke folder proyek dan jalankan aplikasi pada emulator atau perangkat yang sudah dikonfigurasi.',
+    command: 'cd hello_trkj\nflutter run',
+  },
+];
+---
+
+<Layout>
+  <main class="lesson">
+    <a class="back" href="/">← Kembali ke beranda</a>
+
+    <p class="eyebrow">PRAKTIKUM PEMROGRAMAN MOBILE · PERTEMUAN 01</p>
+    <h1>Persiapan Lingkungan Flutter</h1>
+    <p class="intro">
+      Siapkan lingkungan pengembangan dan jalankan aplikasi Flutter
+      pertama sebelum memulai praktikum berikutnya.
+    </p>
+
+    <section class="panel">
+      <h2>1. Tujuan Praktikum</h2>
+      <p>Setelah menyelesaikan praktikum, mahasiswa mampu:</p>
+      <ul>
+        <li>Menjelaskan fungsi Flutter SDK dan Dart.</li>
+        <li>Memeriksa konfigurasi pengembangan menggunakan flutter doctor.</li>
+        <li>Membuat dan menjalankan proyek Flutter sederhana.</li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>2. Alat dan Bahan</h2>
+      <ul>
+        <li>Laptop atau komputer.</li>
+        <li>Flutter SDK dan Git.</li>
+        <li>Visual Studio Code beserta ekstensi Flutter dan Dart.</li>
+        <li>Emulator Android atau perangkat Android yang dikonfigurasi untuk debugging.</li>
+      </ul>
+      <p class="note">
+        Catatan: instalasi Android Studio mungkin diperlukan untuk Android
+        SDK dan emulator, meskipun editor yang digunakan adalah VS Code.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>3. Langkah Praktikum</h2>
+      {steps.map((step, index) => (
+        <article class="step">
+          <h3>{index + 1}. {step.title}</h3>
+          <p>{step.description}</p>
+          <pre><code>{step.command}</code></pre>
+          <button
+            class="copy-button"
+            type="button"
+            data-copy={step.command}
+          >
+            Salin perintah
+          </button>
+        </article>
+      ))}
+    </section>
+
+    <section class="panel">
+      <h2>4. Tugas Praktikum</h2>
+      <ol>
+        <li>Jalankan perintah flutter doctor.</li>
+        <li>Buat proyek bernama hello_trkj.</li>
+        <li>Jalankan aplikasi dan dokumentasikan hasilnya.</li>
+        <li>Jelaskan fungsi Flutter SDK, Dart, dan flutter doctor.</li>
+      </ol>
+    </section>
+
+    <section class="panel">
+      <h2>5. Checklist Penyelesaian</h2>
+      <label><input type="checkbox" /> Flutter terpasang dan diperiksa.</label>
+      <label><input type="checkbox" /> Proyek hello_trkj berhasil dibuat.</label>
+      <label><input type="checkbox" /> Aplikasi berhasil dijalankan.</label>
+      <label><input type="checkbox" /> Tugas praktikum sudah dikerjakan.</label>
+      <p class="note">
+        Checklist ini masih bersifat sementara dan belum menyimpan progres
+        setelah halaman dimuat ulang.
+      </p>
+    </section>
+
+    <nav class="lesson-nav">
+      <a href="/">← Daftar pertemuan</a>
+      <span>Pertemuan berikutnya akan ditambahkan</span>
+    </nav>
+  </main>
+</Layout>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const command = button.dataset.copy ?? '';
+      try {
+        await navigator.clipboard.writeText(command);
+        button.textContent = 'Berhasil disalin!';
+      } catch {
+        button.textContent = 'Gagal menyalin — salin perintah secara manual';
+      }
+    });
+  });
+</script>
+
+<style>
+  .lesson {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 40px 24px 72px;
+    color: #202938;
+  }
+
+  .back {
+    color: #5265c5;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .eyebrow {
+    margin-top: 36px;
+    color: #64748b;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+  }
+
+  h1 {
+    margin: 12px 0;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    line-height: 1.15;
+  }
+
+  .intro {
+    color: #64748b;
+    font-size: 1.1rem;
+    line-height: 1.8;
+  }
+
+  .panel {
+    margin-top: 28px;
+    padding: 24px;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    background: #fff;
+  }
+
+  .panel h2 {
+    margin-top: 0;
+    font-size: 1.3rem;
+  }
+
+  .panel p,
+  .panel li {
+    line-height: 1.8;
+  }
+
+  .step {
+    padding: 16px 0;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  pre {
+    overflow-x: auto;
+    padding: 16px;
+    border-radius: 8px;
+    background: #172033;
+    color: #e2e8f0;
+  }
+
+  .copy-button {
+    padding: 8px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+  }
+
+  .note {
+    color: #64748b;
+    font-size: 0.9rem;
+  }
+
+  .panel label {
+    display: block;
+    margin: 12px 0;
+    line-height: 1.6;
+  }
+
+  .panel input {
+    margin-right: 8px;
+  }
+
+  .lesson-nav {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+    color: #64748b;
+  }
+
+  .lesson-nav a {
+    color: #5265c5;
+    text-decoration: none;
+  }
+
+  @media (max-width: 600px) {
+    .lesson {
+      padding: 28px 16px 48px;
+    }
+
+    .panel {
+      padding: 18px;
+    }
+  }
+</style>

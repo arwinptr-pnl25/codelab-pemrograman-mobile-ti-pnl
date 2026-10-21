@@ -1,0 +1,1785 @@
+
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+
+export async function getStaticPaths() {
+  const materi = await getCollection('praktikum');
+
+  // Urutkan materi berdasarkan nomor pertemuan.
+  const materiTerurut = materi.sort(
+    (a, b) => a.data.pertemuan - b.data.pertemuan
+  );
+
+  return materiTerurut.map((item, index) => ({
+    params: { slug: item.id },
+    props: {
+      item,
+      previous: materiTerurut[index - 1] ?? null,
+      next: materiTerurut[index + 1] ?? null,
+    },
+  }));
+}
+
+const { item, previous, next } = Astro.props;
+const { Content } = await render(item);
+const nomor = String(item.data.pertemuan).padStart(2, '0');
+
+---
+
+<Layout>
+  <div class="page-shell">
+    <header class="topbar">
+      <a href="/" class="brand">
+        <span class="brand-mark">&lt;/&gt;</span>
+        <span>
+          <strong>Codelab TRKJ</strong>
+          <small>Pemrograman Mobile</small>
+        </span>
+      </a>
+      <a href="/" class="topbar-link">Daftar materi ↗</a>
+    </header>
+
+    <div class="breadcrumb">
+      <a href="/">Beranda</a>
+      <span>/</span>
+      <span>Praktikum</span>
+      <span>/</span>
+      <span>Pertemuan {nomor}</span>
+    </div>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow">
+            <span class="status-dot"></span>
+            MODUL PRAKTIKUM {nomor}
+          </div>
+          <h1>{item.data.title}</h1>
+          <p class="hero-description">{item.data.deskripsi}</p>
+          <div class="hero-tags">
+            <span>Flutter</span>
+            <span>Dart</span>
+            <span>Hands-on Lab</span>
+          </div>
+        </div>
+
+        <div class="hero-decoration" aria-hidden="true">
+          <div class="decoration-orbit orbit-one"></div>
+          <div class="decoration-orbit orbit-two"></div>
+          <div class="decoration-core">
+            <span>{nomor}</span>
+            <small>LAB</small>
+          </div>
+          <span class="decoration-symbol symbol-one">&lt;/&gt;</span>
+          <span class="decoration-symbol symbol-two">{ }</span>
+        </div>
+      </section>
+
+      <div class="content-grid">
+        <aside class="sidebar">
+          <div class="sidebar-card">
+            <p class="sidebar-label">DALAM MODUL INI</p>
+            <a href="#subcpmk" class="side-link">
+              <span>01</span> Capaian pembelajaran
+            </a>
+            <a href="#materi" class="side-link">
+              <span>02</span> Materi praktikum
+            </a>
+            <a href="#checklist" class="side-link">
+              <span>03</span> Checklist
+            </a>
+          </div>
+
+          <div class="tip-card">
+            <span class="tip-icon">✦</span>
+            <strong>Tips belajar</strong>
+            <p>Ikuti langkah secara berurutan dan jalankan kode sendiri agar lebih memahami prosesnya.</p>
+          </div>
+        </aside>
+
+        <article class="lesson-content">
+          <section class="outcome-card" id="subcpmk">
+            <div class="section-icon">✓</div>
+            <div>
+              <p class="section-kicker">LEARNING OUTCOMES</p>
+              <h2>Capaian Pembelajaran</h2>
+              <ul class="outcome-list">
+                {item.data.subCpmk.map((tujuan) => (
+                  <li>{tujuan}</li>
+                ))}
+              </ul>
+            </div>
+          </section>
+
+          <section class="article-body" id="materi">
+            <div class="article-heading">
+              <div>
+                <p class="section-kicker">LEARNING MATERIAL</p>
+                <h2>Materi dan Langkah Praktikum</h2>
+              </div>
+              <span class="reading-label">Baca & praktikkan</span>
+            </div>
+
+            <div class="markdown-content">
+              <Content />
+            </div>
+          </section>
+
+          <section class="checklist-card" id="checklist">
+            <div class="checklist-heading">
+              <div>
+                <p class="section-kicker">YOUR PROGRESS</p>
+                <h2>Checklist Praktikum</h2>
+                <p>Tandai setiap aktivitas setelah selesai.</p>
+              </div>
+              <div class="progress-count" id="progress-count">0/4</div>
+            </div>
+
+            <div class="progress-track">
+              <div class="progress-fill" id="checklist-progress-bar"></div>
+            </div>
+
+            <div class="checklist-items" id="checklist-praktikum" data-slug={item.id}>
+              <label class="check-item">
+                <input type="checkbox" data-checklist-id="1" />
+                <span class="custom-check"></span>
+                <span>Memahami tujuan praktikum</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox" data-checklist-id="2" />
+                <span class="custom-check"></span>
+                <span>Menyelesaikan langkah praktikum</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox" data-checklist-id="3" />
+                <span class="custom-check"></span>
+                <span>Mencoba dan menjalankan kode</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox" data-checklist-id="4" />
+                <span class="custom-check"></span>
+                <span>Menyelesaikan tugas praktikum</span>
+              </label>
+            </div>
+            
+          </section>
+
+          
+        <nav class="bottom-nav" aria-label="Navigasi antarpertemuan">
+          {previous ? (
+            <a
+              href={`/praktikum/${previous.id}`}
+              class="nav-button secondary-button"
+            >
+              <span>←</span>
+              <span>
+                <small>PERTEMUAN SEBELUMNYA</small>
+                <strong>{previous.data.title}</strong>
+              </span>
+            </a>
+          ) : (
+            <a href="/" class="nav-button secondary-button">
+              <span>←</span>
+              <span>
+                <small>KEMBALI KE</small>
+                <strong>Daftar pertemuan</strong>
+              </span>
+            </a>
+          )}
+
+          {next && (
+            <a
+              href={`/praktikum/${next.id}`}
+              class="nav-button primary-button"
+            >
+              <span>
+                <small>PERTEMUAN SELANJUTNYA</small>
+                <strong>{next.data.title}</strong>
+              </span>
+              <span>→</span>
+            </a>
+          )}
+        </nav>
+
+        </article>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <span>© Codelab Pemrograman Mobile TRKJ</span>
+      <span>Dibuat untuk pembelajaran praktikum</span>
+    </footer>
+  </div>
+</Layout>
+
+<script>
+  // Tombol salin untuk setiap blok kode Markdown.
+  
+  // Tombol salin untuk setiap blok kode Markdown.
+  document.querySelectorAll('.markdown-content pre').forEach((pre) => {
+    if (pre.parentElement?.classList.contains('code-card')) return;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'code-card';
+
+    pre.parentNode?.insertBefore(wrapper, pre);
+    wrapper.appendChild(pre);
+
+    const header = document.createElement('div');
+    header.className = 'code-header';
+
+    const code = pre.querySelector('code');
+    const language =
+      code?.className.match(/language-([\w-]+)/)?.[1] ?? 'CODE';
+
+    const languageLabel = document.createElement('span');
+    languageLabel.className = 'code-language';
+    languageLabel.textContent = language.toUpperCase();
+
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'copy-button';
+    button.innerHTML = `
+      <svg
+        width="15"
+        height="15"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <rect x="8" y="8" width="12" height="12" rx="2"></rect>
+        <path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"></path>
+      </svg>
+      <span>Salin kode</span>
+    `;
+
+    const label = button.querySelector('span');
+
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(
+          code?.textContent ?? pre.textContent ?? ''
+        );
+
+        if (label) label.textContent = 'Tersalin!';
+        button.classList.add('is-copied');
+
+        window.setTimeout(() => {
+          if (label) label.textContent = 'Salin kode';
+          button.classList.remove('is-copied');
+        }, 1800);
+      } catch {
+        if (label) label.textContent = 'Gagal menyalin';
+      }
+    });
+
+    header.append(languageLabel, button);
+    wrapper.insertBefore(header, pre);
+  });
+
+
+  // Progress checklist di halaman saat ini.
+  const checkboxes = Array.from(
+    document.querySelectorAll<HTMLInputElement>('.check-item input')
+  );
+  const count = document.querySelector('#progress-count');
+  const fill = document.querySelector<HTMLElement>('#progress-fill');
+
+  function updateProgress() {
+    const completed = checkboxes.filter((checkbox) => checkbox.checked).length;
+
+    if (count) count.textContent = `${completed}/${checkboxes.length}`;
+    if (fill) fill.style.width = `${checkboxes.length ? completed / checkboxes.length * 100 : 0}%`;
+  }
+
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener('change', updateProgress);
+  });
+
+  // fitur simpan checklist
+  function initChecklistStorage() {
+    const checklist = document.querySelector<HTMLElement>(
+      '#checklist-praktikum'
+    );
+
+    if (!checklist) return;
+
+    const slug = checklist.dataset.slug;
+    if (!slug) return;
+
+    // Kunci penyimpanan unik untuk setiap pertemuan.
+    const storageKey = `codelab-trkj-checklist-${slug}`;
+
+    const checkboxes = Array.from(
+      checklist.querySelectorAll<HTMLInputElement>(
+        'input[data-checklist-id]'
+      )
+    );
+
+    const progressCount = document.querySelector<HTMLElement>(
+      '#progress-count'
+    );
+
+    const progressBar = document.querySelector<HTMLElement>(
+      '#checklist-progress-bar'
+    );
+
+    // Membaca data dari localStorage.
+    function loadChecklist(): Record<string, boolean> {
+      try {
+        const saved = localStorage.getItem(storageKey);
+        return saved ? JSON.parse(saved) : {};
+      } catch {
+        return {};
+      }
+    }
+
+    // Memperbarui tulisan dan progress bar.
+    function updateProgress() {
+      const completed = checkboxes.filter(
+        (checkbox) => checkbox.checked
+      ).length;
+
+      const total = checkboxes.length;
+      const percentage =
+        total > 0 ? (completed / total) * 100 : 0;
+
+      if (progressCount) {
+        progressCount.textContent = `${completed}/${total}`;
+      }
+
+      if (progressBar) {
+        progressBar.style.width = `${percentage}%`;
+      }
+    }
+
+    // Pulihkan status checklist yang tersimpan.
+    const savedState = loadChecklist();
+
+    checkboxes.forEach((checkbox) => {
+      const id = checkbox.dataset.checklistId;
+
+      checkbox.checked = id ? savedState[id] === true : false;
+
+      checkbox.addEventListener('change', () => {
+        const currentState = loadChecklist();
+        const currentId = checkbox.dataset.checklistId;
+
+        if (!currentId) return;
+
+        currentState[currentId] = checkbox.checked;
+
+        try {
+          localStorage.setItem(
+            storageKey,
+            JSON.stringify(currentState)
+          );
+        } catch (error) {
+          console.warn('Gagal menyimpan checklist:', error);
+        }
+
+        updateProgress();
+      });
+    });
+
+    // Jalankan setelah semua status checkbox dipulihkan.
+    updateProgress();
+  }
+
+  initChecklistStorage();
+</script>
+
+<style>
+  :global(*) {
+    box-sizing: border-box;
+  }
+
+  :global(body) {
+    background: #f7f8fc;
+    color: #20283b;
+  }
+
+  .page-shell {
+  --ink: #172033;
+  --muted: #64748b;
+  --purple: #2563eb;
+  --line: #e2e8f0;
+    min-height: 100vh;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+  }
+
+  .topbar {
+    height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 max(6%, calc((100vw - 1240px) / 2));
+    background: rgba(255, 255, 255, 0.94);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .brand-mark {
+    display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: #1d4ed8;
+  color: #ffffff;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 15px;
+  font-weight: 800;
+  }
+
+  .brand strong,
+  .brand small {
+    display: block;
+  }
+
+  .brand strong {
+    font-size: 15px;
+    letter-spacing: -0.3px;
+  }
+
+  .brand small {
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .topbar-link {
+    font-size: 13px;
+    font-weight: 650;
+    color: #1d4ed8;
+    text-decoration: none;
+  }
+
+  .breadcrumb {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 25px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 12px;
+    color: #8b93a6;
+  }
+
+  .breadcrumb a {
+    color: #1d4ed8;
+    text-decoration: none;
+  }
+
+  main {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: 290px;
+    padding: 44px 54px;
+    overflow: hidden;
+    border-radius: 24px;
+    background: linear-gradient( 115deg,#0f172a 0%,#172554 56%,#1d4ed8 100%);
+    color: white;
+    box-shadow: 0 18px 50px #25254b1c;
+  }
+
+  .hero-copy {
+    position: relative;
+    z-index: 1;
+    max-width: 690px;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #c1bbff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+  }
+
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    background: #8de0c1;
+    border-radius: 50%;
+    box-shadow: 0 0 12px #8de0c1a6;
+  }
+
+  .hero h1 {
+    margin: 20px 0 14px;
+    font-size: clamp(30px, 4vw, 46px);
+    line-height: 1.12;
+    letter-spacing: -1.6px;
+    font-weight: 800;
+  }
+
+  .hero-description {
+    max-width: 590px;
+    margin: 0;
+    color: #c6c9df;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 23px;
+  }
+
+  .hero-tags span {
+    padding: 7px 11px;
+    border: 1px solid #ffffff25;
+    border-radius: 7px;
+    background: #ffffff0d;
+    color: #e5e4ff;
+    font-size: 11px;
+    font-weight: 650;
+  }
+
+  .hero-decoration {
+    position: relative;
+    flex: 0 0 210px;
+    width: 210px;
+    height: 210px;
+  }
+
+  .decoration-orbit {
+    position: absolute;
+    border: 1px solid #ffffff26;
+    border-radius: 50%;
+  }
+
+  .orbit-one {
+    inset: 6px;
+  }
+
+  .orbit-two {
+    inset: 28px;
+    border-style: dashed;
+  }
+
+  .decoration-core {
+    position: absolute;
+    inset: 56px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ffffff36;
+    border-radius: 28px;
+    background: linear-gradient(145deg, #ffffff25, #ffffff08);
+    box-shadow: 0 10px 30px #11132c3d;
+    transform: rotate(-8deg);
+  }
+
+  .decoration-core span {
+    font-size: 34px;
+    font-weight: 850;
+    letter-spacing: -2px;
+  }
+
+  .decoration-core small {
+    margin-top: 3px;
+    color: #c9c4ff;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 2px;
+  }
+
+  .decoration-symbol {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid #ffffff2c;
+    border-radius: 12px;
+    background: #ffffff12;
+    color: #e1dcff;
+    font-size: 15px;
+    font-weight: 800;
+  }
+
+  .symbol-one {
+    top: 5px;
+    right: 5px;
+  }
+
+  .symbol-two {
+    bottom: 5px;
+    left: 5px;
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    align-items: start;
+    gap: 36px;
+    margin: 34px 0 70px;
+  }
+
+  .sidebar {
+    position: sticky;
+    top: 20px;
+    display: grid;
+    gap: 16px;
+  }
+
+  .sidebar-card,
+  .tip-card,
+  .outcome-card,
+  .checklist-card {
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: white;
+    box-shadow: 0 4px 20px #222d4805;
+  }
+
+  .sidebar-card {
+    padding: 22px 17px;
+  }
+
+  .sidebar-label,
+  .section-kicker {
+    margin: 0;
+    color: #969cb0;
+    font-size: 10px;
+    font-weight: 850;
+    letter-spacing: 1.3px;
+  }
+
+  .sidebar-label {
+    padding: 0 9px 14px;
+  }
+
+  .side-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 9px;
+    border-radius: 8px;
+    color: #667087;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .side-link span {
+    color: #a0a6b8;
+    font-size: 10px;
+    font-weight: 800;
+  }
+
+  .side-link:hover {
+    background: #f4f2ff;
+    color: var(--purple);
+  }
+
+  .tip-card {
+    padding: 20px;
+    background: linear-gradient(145deg, #f0eeff, #faf9ff);
+    border-color: #e6e1ff;
+  }
+
+  .tip-icon {
+    display: block;
+    margin-bottom: 12px;
+    color: #2563eb;
+    font-size: 23px;
+  }
+
+  .tip-card strong {
+    font-size: 13px;
+  }
+
+  .tip-card p {
+    margin-bottom: 0;
+    color: #727a91;
+    font-size: 12px;
+    line-height: 1.8;
+  }
+
+  .lesson-content {
+    min-width: 0;
+  }
+
+  .outcome-card {
+    display: flex;
+    gap: 17px;
+    padding: 26px;
+    border-color: #e2e6fb;
+    background: linear-gradient(120deg, #fff, #fbfaff);
+  }
+
+  .section-icon {
+    display: grid;
+    flex: 0 0 39px;
+    place-items: center;
+    width: 39px;
+    height: 39px;
+    border-radius: 12px;
+    background: #eeebff;
+    color: #2563eb;
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  .outcome-card h2,
+  .article-heading h2,
+  .checklist-heading h2 {
+    margin: 7px 0 12px;
+    font-size: 21px;
+    line-height: 1.35;
+    letter-spacing: -0.5px;
+  }
+
+  .outcome-list {
+    display: grid;
+    gap: 8px;
+    padding-left: 19px;
+    margin-bottom: 0;
+    color: #626d84;
+    font-size: 13px;
+    line-height: 1.8;
+  }
+
+  .article-body {
+    padding: 38px 4px 12px;
+  }
+
+  .article-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 26px;
+  }
+
+  .article-heading h2 {
+    margin-bottom: 0;
+    font-size: 25px;
+  }
+
+  .reading-label {
+    padding: 7px 10px;
+    border: 1px solid #e5e1ff;
+    border-radius: 7px;
+    background: #f5f3ff;
+    color: #2563eb;
+    font-size: 10px;
+    font-weight: 750;
+  }
+
+  .markdown-content {
+    color: #59657b;
+    font-size: 14px;
+    line-height: 1.9;
+  }
+
+  .markdown-content h1,
+  .markdown-content h2,
+  .markdown-content h3,
+  .markdown-content h4 {
+    color: #273047;
+    line-height: 1.4;
+    letter-spacing: -0.4px;
+  }
+
+  .markdown-content h1 {
+    font-size: 26px;
+  }
+
+  .markdown-content h2 {
+    margin: 36px 0 13px;
+    font-size: 22px;
+  }
+
+  .markdown-content h3 {
+    margin: 27px 0 10px;
+    font-size: 17px;
+  }
+
+  .markdown-content p {
+    margin: 12px 0 18px;
+  }
+
+  .markdown-content li {
+    padding-left: 4px;
+    margin: 6px 0;
+  }
+
+  .markdown-content ul,
+  .markdown-content ol {
+    padding-left: 23px;
+    margin: 12px 0 22px;
+  }
+
+  .markdown-content li::marker {
+    color: #2563eb;
+  }
+
+  .markdown-content a {
+    color: #1d4ed8;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .markdown-content blockquote {
+    margin: 20px 0;
+    padding: 13px 18px;
+    border-left: 3px solid #2563eb;
+    border-radius: 0 9px 9px 0;
+    background: #f4f2ff;
+  }
+
+  .markdown-content blockquote p {
+    margin: 0;
+  }
+
+  .code-card {
+    overflow: hidden;
+    margin: 18px 0 25px;
+    border: 1px solid #252d45;
+    border-radius: 12px;
+    background: #171d30;
+    box-shadow: 0 8px 24px #19213a13;
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 15px;
+    border-bottom: 1px solid #ffffff12;
+    color: #a8b2ce;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+
+  .copy-button {
+    padding: 6px 10px;
+    border: 1px solid #ffffff25;
+    border-radius: 6px;
+    background: #ffffff0a;
+    color: #e2e8f7;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 650;
+    letter-spacing: 0;
+  }
+
+  .copy-button:hover {
+    background: #ffffff18;
+  }
+
+  .markdown-content pre {
+    overflow-x: auto;
+    margin: 0;
+    padding: 20px;
+    color: #e2e8f0;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+    font-size: 12px;
+    line-height: 1.9;
+    tab-size: 2;
+  }
+
+  .markdown-content pre code {
+    color: inherit;
+    font: inherit;
+    white-space: pre;
+  }
+
+  .markdown-content :not(pre) > code {
+    padding: 3px 6px;
+    border: 1px solid #e6e8f2;
+    border-radius: 5px;
+    background: #f2f3fa;
+    color: #1d4ed8;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 0.88em;
+  }
+
+  .checklist-card {
+    margin-top: 28px;
+    padding: 26px;
+  }
+
+  .checklist-heading {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .checklist-heading h2 {
+    margin-bottom: 5px;
+  }
+
+  .checklist-heading p:not(.section-kicker) {
+    margin: 0;
+    color: #8a92a6;
+    font-size: 12px;
+  }
+
+  .progress-count {
+    display: grid;
+    place-items: center;
+    min-width: 49px;
+    height: 36px;
+    padding: 0 9px;
+    border-radius: 9px;
+    background: #f0edff;
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 850;
+  }
+
+  .progress-track {
+    height: 5px;
+    margin: 22px 0;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #eceef5;
+  }
+
+  .progress-fill {
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #1d4ed8, #2563eb);
+    transition: width 0.25s ease;
+  }
+
+  .checklist-items {
+    display: grid;
+    gap: 4px;
+  }
+
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 10px;
+    border-radius: 9px;
+    color: #59657b;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .check-item:hover {
+    background: #f8f8fc;
+  }
+
+  .check-item input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .custom-check {
+    display: grid;
+    flex: 0 0 19px;
+    place-items: center;
+    width: 19px;
+    height: 19px;
+    border: 1.5px solid #d5d9e7;
+    border-radius: 6px;
+    background: white;
+  }
+
+  .check-item input:checked + .custom-check {
+    border-color: #1d4ed8;
+    background: #1d4ed8;
+  }
+
+  .check-item input:checked + .custom-check::after {
+    content: '✓';
+    color: white;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .check-item input:focus-visible + .custom-check {
+    outline: 3px solid #2563eb;
+    outline-offset: 2px;
+  }
+
+  .check-item:has(input:checked) > span:last-child {
+    color: #939aab;
+    text-decoration: line-through;
+  }
+
+  .checklist-note {
+    margin: 18px 0 0;
+    color: #959caf;
+    font-size: 11px;
+    line-height: 1.7;
+  }
+
+  .bottom-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 27px;
+  }
+
+  .nav-button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 63px;
+    padding: 12px 16px;
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+  }
+
+  .nav-button:hover {
+    transform: translateY(-2px);
+  }
+
+  .nav-button small,
+  .nav-button strong {
+    display: block;
+  }
+
+  .nav-button small {
+    margin-bottom: 4px;
+    font-size: 9px;
+    letter-spacing: 0.7px;
+  }
+
+  .nav-button strong {
+    font-size: 12px;
+  }
+
+  .secondary-button {
+    background: white;
+    color: #626d84;
+  }
+
+  .secondary-button small {
+    color: #9ba2b3;
+  }
+
+  .primary-button {
+    border-color: #2563eb;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    box-shadow: 0 7px 18px #6657d929;
+  }
+
+  .primary-button small {
+    color: #dcd7ff;
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 24px max(6%, calc((100vw - 1240px) / 2));
+    border-top: 1px solid var(--line);
+    background: white;
+    color: #969db0;
+    font-size: 11px;
+  }
+
+  @media (max-width: 850px) {
+    .hero {
+      padding: 36px;
+    }
+
+    .hero-decoration {
+      flex-basis: 150px;
+      width: 150px;
+      height: 150px;
+    }
+
+    .decoration-core {
+      inset: 42px;
+      border-radius: 20px;
+    }
+
+    .decoration-core span {
+      font-size: 27px;
+    }
+
+    .content-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .sidebar {
+      position: static;
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 580px) {
+    .topbar {
+      height: 68px;
+      padding: 0 17px;
+    }
+
+    .brand-mark {
+      width: 37px;
+      height: 37px;
+    }
+
+    .topbar-link {
+      font-size: 11px;
+    }
+
+    .breadcrumb {
+      padding: 20px 17px;
+      gap: 7px;
+    }
+
+    main {
+      padding: 0 14px;
+    }
+
+    .hero {
+      min-height: 0;
+      padding: 30px 24px;
+      border-radius: 18px;
+    }
+
+    .hero h1 {
+      font-size: 32px;
+      letter-spacing: -1px;
+    }
+
+    .hero-description {
+      font-size: 13px;
+    }
+
+    .hero-decoration {
+      display: none;
+    }
+
+    .sidebar {
+      grid-template-columns: 1fr;
+    }
+
+    .outcome-card {
+      padding: 20px;
+    }
+
+    .article-body {
+      padding-top: 30px;
+    }
+
+    .article-heading h2 {
+      font-size: 22px;
+    }
+
+    .checklist-card {
+      padding: 20px 16px;
+    }
+
+    .bottom-nav {
+      flex-direction: column;
+    }
+
+    .nav-button {
+      justify-content: space-between;
+    }
+
+    .footer {
+      padding: 22px 18px;
+    }
+  }
+
+  
+/* =========================================
+   MARKDOWN / MDX CONTENT
+   ========================================= */
+
+.markdown-content {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #334155;
+  line-height: 1.8;
+}
+
+/* Heading */
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4 {
+  color: #172033;
+  font-weight: 750;
+  line-height: 1.35;
+  scroll-margin-top: 100px;
+}
+
+.markdown-content h1 {
+  font-size: clamp(1.8rem, 4vw, 2.3rem);
+  margin: 0 0 1.25rem;
+}
+
+.markdown-content h2 {
+  font-size: 1.55rem;
+  margin: 2.5rem 0 1rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.markdown-content h3 {
+  font-size: 1.2rem;
+  margin: 1.8rem 0 0.7rem;
+}
+
+.markdown-content h4 {
+  font-size: 1.05rem;
+  margin: 1.4rem 0 0.6rem;
+}
+
+/* Paragraph and lists */
+.markdown-content p {
+  margin: 0 0 1rem;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  padding-left: 1.5rem;
+  margin: 0 0 1.25rem;
+}
+
+.markdown-content li {
+  padding-left: 0.25rem;
+  margin: 0.35rem 0;
+}
+
+.markdown-content li::marker {
+  color: #2563eb;
+}
+
+.markdown-content li > ul,
+.markdown-content li > ol {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Links */
+.markdown-content a {
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: #bfdbfe;
+  text-underline-offset: 3px;
+}
+
+.markdown-content a:hover {
+  color: #1d4ed8;
+  text-decoration-color: currentColor;
+}
+
+/* Inline code */
+.markdown-content :not(pre) > code {
+  padding: 0.15rem 0.4rem;
+  border: 1px solid #dbeafe;
+  border-radius: 5px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 0.9em;
+  overflow-wrap: anywhere;
+}
+
+/* Code blocks */
+.markdown-content pre {
+  max-width: 100%;
+  margin: 0;
+  padding: 1.2rem;
+  overflow-x: auto;
+  background: #0f172a;
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  tab-size: 2;
+}
+
+.markdown-content pre code {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+  overflow-wrap: normal;
+}
+
+/* Tables */
+.markdown-content table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 0.94rem;
+  line-height: 1.6;
+}
+
+.markdown-content thead {
+  background: #eff6ff;
+}
+
+.markdown-content th,
+.markdown-content td {
+  padding: 0.8rem 1rem;
+  border: 1px solid #e2e8f0;
+  text-align: left;
+  vertical-align: top;
+}
+
+.markdown-content th {
+  color: #172033;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.markdown-content tbody tr:nth-child(even) {
+  background: #f8fafc;
+}
+
+.markdown-content tbody tr:hover {
+  background: #eff6ff;
+}
+
+/* Images and figures */
+.markdown-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.markdown-content figure {
+  margin: 1.5rem 0;
+}
+
+.markdown-content figcaption {
+  margin-top: 0.6rem;
+  color: #64748b;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+/* Blockquotes */
+.markdown-content blockquote {
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border-left: 4px solid #2563eb;
+  border-radius: 0 8px 8px 0;
+  background: #eff6ff;
+  color: #334155;
+}
+
+.markdown-content blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+/* Horizontal divider */
+.markdown-content hr {
+  height: 1px;
+  margin: 2.25rem 0;
+  border: 0;
+  background: #e2e8f0;
+}
+
+/* Strong and italic text */
+.markdown-content strong {
+  color: #172033;
+  font-weight: 750;
+}
+
+.markdown-content em {
+  color: #475569;
+}
+
+/* Keyboard keys */
+.markdown-content kbd {
+  display: inline-block;
+  padding: 0.15rem 0.4rem;
+  border: 1px solid #cbd5e1;
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: #f8fafc;
+  color: #334155;
+  font-family: inherit;
+  font-size: 0.85em;
+}
+
+/* Details / expandable notes */
+.markdown-content details {
+  margin: 1rem 0;
+  padding: 0.9rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.markdown-content summary {
+  color: #1d4ed8;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.markdown-content details[open] summary {
+  margin-bottom: 0.8rem;
+}
+
+/* Prevent wide content from breaking the layout */
+.markdown-content iframe,
+.markdown-content video {
+  max-width: 100%;
+}
+
+@media (max-width: 580px) {
+  .markdown-content h2 {
+    font-size: 1.35rem;
+  }
+
+  .markdown-content h3 {
+    font-size: 1.12rem;
+  }
+
+  .markdown-content th,
+  .markdown-content td {
+    padding: 0.65rem 0.75rem;
+  }
+
+  .markdown-content pre {
+    padding: 0.9rem;
+    font-size: 0.82rem;
+  }
+}
+
+
+
+
+/* Markdown: gunakan global selector untuk konten MDX */
+:global(.markdown-content) {
+  color: #334155;
+  font-size: 0.97rem;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+:global(.markdown-content h1),
+:global(.markdown-content h2),
+:global(.markdown-content h3),
+:global(.markdown-content h4) {
+  color: #172033;
+  font-weight: 750;
+  line-height: 1.4;
+  scroll-margin-top: 100px;
+}
+
+:global(.markdown-content h2) {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+:global(.markdown-content h3) {
+  margin-top: 1.8rem;
+  margin-bottom: 0.75rem;
+}
+
+:global(.markdown-content p) {
+  margin: 0 0 1rem;
+}
+
+:global(.markdown-content ul),
+:global(.markdown-content ol) {
+  padding-left: 1.5rem;
+  margin: 0 0 1.25rem;
+}
+
+:global(.markdown-content li) {
+  margin: 0.35rem 0;
+}
+
+:global(.markdown-content li::marker) {
+  color: #2563eb;
+}
+
+:global(.markdown-content a) {
+  color: #2563eb;
+  text-decoration: underline;
+  text-decoration-color: #bfdbfe;
+  text-underline-offset: 3px;
+}
+
+:global(.markdown-content :not(pre) > code) {
+  padding: 0.15rem 0.4rem;
+  border: 1px solid #dbeafe;
+  border-radius: 5px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 0.9em;
+}
+
+:global(.markdown-content table) {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 0.94rem;
+}
+
+:global(.markdown-content thead) {
+  background: #eff6ff;
+}
+
+:global(.markdown-content th),
+:global(.markdown-content td) {
+  padding: 0.8rem 1rem;
+  border: 1px solid #e2e8f0;
+  text-align: left;
+  vertical-align: top;
+}
+
+:global(.markdown-content th) {
+  color: #172033;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+:global(.markdown-content tbody tr:nth-child(even)) {
+  background: #f8fafc;
+}
+
+:global(.markdown-content img) {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+:global(.markdown-content blockquote) {
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border-left: 4px solid #2563eb;
+  border-radius: 0 8px 8px 0;
+  background: #eff6ff;
+  color: #334155;
+}
+
+:global(.markdown-content hr) {
+  height: 1px;
+  margin: 2.25rem 0;
+  border: 0;
+  background: #e2e8f0;
+}
+
+/* Code card: elemen ini dibuat oleh JavaScript */
+:global(.code-card) {
+  margin: 1.5rem 0;
+  overflow: hidden;
+  border: 1px solid #263449;
+  border-radius: 12px;
+  background: #0f172a;
+  box-shadow: 0 6px 18px rgb(15 23 42 / 8%);
+}
+
+:global(.code-card pre) {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+:global(.code-card button) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 32px;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid #475569;
+  border-radius: 7px;
+  background: #1e293b;
+  color: #e2e8f0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+:global(.code-card button:hover) {
+  border-color: #60a5fa;
+  background: #334155;
+}
+
+:global(.code-card button:active) {
+  transform: scale(0.97);
+}
+
+:global(.code-card button:focus-visible) {
+  outline: 2px solid #60a5fa;
+  outline-offset: 3px;
+}
+
+@media (max-width: 580px) {
+  :global(.markdown-content table) {
+    font-size: 0.85rem;
+  }
+
+  :global(.markdown-content th),
+  :global(.markdown-content td) {
+    padding: 0.65rem 0.75rem;
+  }
+
+  :global(.code-card pre) {
+    font-size: 0.82rem;
+  }
+}
+
+
+
+/* Code block seperti dokumentasi developer */
+:global(.code-card) {
+  margin: 1.5rem 0 2rem;
+  overflow: hidden;
+  border: 1px solid #263449;
+  border-radius: 12px;
+  background: #0f172a;
+  box-shadow: 0 8px 24px rgb(15 23 42 / 10%);
+}
+
+:global(.code-header) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 48px;
+  padding: 8px 12px 8px 16px;
+  border-bottom: 1px solid #263449;
+  background: #111c30;
+}
+
+:global(.code-language) {
+  color: #93c5fd;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+:global(.copy-button) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 32px;
+  padding: 6px 10px;
+  border: 1px solid #334155;
+  border-radius: 7px;
+  background: #1e293b;
+  color: #cbd5e1;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+:global(.copy-button:hover) {
+  border-color: #60a5fa;
+  background: #263b56;
+  color: #ffffff;
+}
+
+:global(.copy-button.is-copied) {
+  border-color: #166534;
+  background: #14532d;
+  color: #bbf7d0;
+}
+
+:global(.copy-button:focus-visible) {
+  outline: 2px solid #60a5fa;
+  outline-offset: 3px;
+}
+
+:global(.code-card pre) {
+  margin: 0;
+  padding: 18px 20px;
+  overflow-x: auto;
+  background: transparent;
+  color: #e2e8f0;
+  font-size: 0.88rem;
+  line-height: 1.8;
+  tab-size: 2;
+}
+
+:global(.code-card pre code) {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+  overflow-wrap: normal;
+}
+
+@media (max-width: 580px) {
+  :global(.code-header) {
+    padding-left: 12px;
+  }
+
+  :global(.code-card pre) {
+    padding: 14px;
+    font-size: 0.8rem;
+  }
+}
+
+
+</style>
